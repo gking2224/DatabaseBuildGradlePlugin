@@ -6,9 +6,17 @@ import org.gradle.api.Project
 class DatabaseBuildGradlePlugin implements Plugin<Project> {
 
 	void apply(Project project) {
-		println("applying databasebuild plugin")
+		project.extensions.create("dbconfig", DatabaseBuildPluginExtension)
 		project.task('hello') << {
 			println "Hello from databasebuild plugin - updated"
 		}
 	}
+}
+
+class DatabaseBuildPluginExtension {
+	String host
+	int port
+	String username
+	String password
+	String name
 }
