@@ -19,4 +19,6 @@ class DatabaseBuildPluginExtension {
 	String username
 	String password
 	String name
+	String classpath
+	String driver
 }
