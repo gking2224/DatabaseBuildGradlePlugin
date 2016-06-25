@@ -13,7 +13,7 @@ class ExecuteScript extends DatabaseConnectTask {
 		println ""
 		
 		def sqlFile = project.file(scriptFile)
-		ant.sql(classpath: ${project.dbconfig.classpath},
+		ant.sql(classpath: project.dbconfig.classpath,
 			driver: project.dbconfig.driver,
 			url: "jdbc:mysql://${project.dbconfig.host}:${project.dbconfig.port}/${project.dbconfig.name}",
 			userid: project.dbconfig.username,
