@@ -8,6 +8,6 @@ class ExecuteScript extends DatabaseConnectTask {
 	def doAction() {
 		print "Connecting to database ${project.dbconfig.host}:${project.dbconfig.port}/"
 		print "${project.dbconfig.name} as ${project.dbconfig.username}"
-		println
+		println ""
 	}
 }
