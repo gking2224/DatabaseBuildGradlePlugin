@@ -5,5 +5,5 @@ import org.gradle.api.tasks.TaskAction
 
 
 abstract class DatabaseConnectTask extends DefaultTask {
-	
+	def myvar
 }
