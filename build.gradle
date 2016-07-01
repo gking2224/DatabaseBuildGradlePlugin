@@ -37,3 +37,5 @@ dependencies {
 	compile gradleApi()
 	compile localGroovy()
 }
+
+println "dummy"
