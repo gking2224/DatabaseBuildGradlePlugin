@@ -6,6 +6,8 @@ buildscript {
         mavenLocal()
         mavenCentral()
         jcenter()
+        maven {url= "http://artifactory.gking2224.me/artifactory/libs-release" }
+        maven {url= "http://artifactory.gking2224.me/artifactory/libs-snapshot" }
     }
     dependencies {
         classpath "me.gking2224:BuildToolsGradlePlugin:0.1.8-SNAPSHOT"
@@ -36,4 +38,37 @@ dependencies {
 	
 	compile gradleApi()
 	compile localGroovy()
+}
+
+eclipse {
+    project {
+        buildCommand 'org.eclipse.jdt.core.javabuilder'
+        buildCommand 'org.springframework.ide.eclipse.core.springbuilder'
+        natures 'org.eclipse.jdt.core.javanature',
+                'org.springsource.ide.eclipse.gradle.core.nature',
+                'org.springframework.ide.eclipse.core.springnature'
+    }
+    classpath {
+        defaultOutputDir = file('build/classes')
+        containers = [
+            'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8',
+            'org.springsource.ide.eclipse.gradle.classpathcontainer'  // Gradle IDE classpath container
+        ]
+        file {
+            // exclude jar entries from .classpath
+            whenMerged { classpath ->
+                classpath.configure classpath.entries.grep { entry ->
+                    !(entry instanceof org.gradle.plugins.ide.eclipse.model.Library)
+                }
+                classpath.entries.findAll {
+                    it instanceof org.gradle.plugins.ide.eclipse.model.SourceFolder && it.path.startsWith("src/test/")
+                }*.output = "build/test-classes"
+                classpath.entries.findAll {
+                    it instanceof org.gradle.plugins.ide.eclipse.model.SourceFolder && it.path.startsWith("src/integration/")
+                }*.output = "build/integration-classes"
+            }
+        }
+        downloadSources = true
+        downloadJavadoc = true
+    }
 }
