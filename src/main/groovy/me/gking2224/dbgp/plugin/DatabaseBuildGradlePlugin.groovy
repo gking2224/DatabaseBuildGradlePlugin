@@ -7,9 +7,8 @@ class DatabaseBuildGradlePlugin implements Plugin<Project> {
 
 	void apply(Project project) {
 		project.extensions.create("dbconfig", DatabaseBuildPluginExtension)
-		project.task('hello') << {
-			println "Hello from databasebuild plugin - updated"
-		}
+        def dir = project.file("db")
+        project.ext.dbDir = dir 
 	}
 }
 
