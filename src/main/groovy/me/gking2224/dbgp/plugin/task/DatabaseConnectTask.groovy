@@ -1,9 +1,22 @@
 package me.gking2224.dbgp.plugin.task
 
+import me.gking2224.dbgp.plugin.DatabaseBuildPluginExtension
+
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.TaskAction
 
 
 abstract class DatabaseConnectTask extends DefaultTask {
-	def myvar
+	def profile = "default"
+    
+    def getProfileObject(def profile) {
+        if (profile == null) profile = this.profile
+        logger.trace "getProfileObject for $profile"
+        DatabaseBuildPluginExtension extension =
+            project.extensions.getByType(DatabaseBuildPluginExtension.class)
+        return extension.profiles[profile]
+	}
+    
+    def getProfileObject() {
+        return getProfileObject(this.profile)
+    }
 }

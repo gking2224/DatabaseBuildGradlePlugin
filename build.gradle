@@ -27,12 +27,14 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
     
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile "me.gking2224:BuildToolsGradlePlugin:0.1.8-SNAPSHOT"
 	
 	compile gradleApi()
 	compile localGroovy()
