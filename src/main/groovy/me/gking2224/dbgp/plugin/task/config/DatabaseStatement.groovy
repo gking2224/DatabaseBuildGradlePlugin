@@ -4,23 +4,25 @@ import java.lang.ProcessBuilder.Redirect;
 
 class DatabaseStatement extends DatabaseExecutable {
 
-    def statement
+    def statements = []
     
     def DatabaseStatement(def task) {
         super(task)
     }
     
     def doExecute() {
-        logger.info "Executing statement $statement"
-        executeStatement(statement)
+        statements.each{
+            executeStatement(it)
+        }
     }
     
     def executeStatement(def s) {
         
         def exec = getExecutableCommands()
-        exec << "-e" << s
+        exec = appendInlineStatement(exec, s)
         def out = new StringBuffer()
         project.dryRunExecute("Not executing: $exec", {
+            logger.info "Executing $exec"
             exec = appendPassword(exec)
             ProcessBuilder pb = new ProcessBuilder(exec as String[]).redirectErrorStream(true)
             Process process = pb.start()
@@ -32,6 +34,7 @@ class DatabaseStatement extends DatabaseExecutable {
                     logger.warn(out.toString())
                 }
                 else {
+                    logger.error(out.toString())
                     assert process.exitValue() == 0 : "Error executing '${s}'"
                 }
             }
@@ -39,5 +42,13 @@ class DatabaseStatement extends DatabaseExecutable {
                 logger.debug(out.toString())
             }
         })
+    }
+    
+    def setStatement(def stmt) {
+        statements << stmt
+    }
+    
+    def doResolve() {
+        statements = statements.collect{project.resolveValue(it)}
     }
 }

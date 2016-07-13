@@ -17,7 +17,6 @@ class DatabaseScript extends DatabaseExecutable {
     }
     
     def doResolve() {
-        logger.info("Resolving files: pattern=$pattern dir=$dir file=$files")
         if (files.size() == 0 && pattern != null && dir != null) {
             files = resolvePattern()
         }
@@ -34,15 +33,12 @@ class DatabaseScript extends DatabaseExecutable {
     def resolveFile(def f) {
         assert f != null : "Null file"
         if ([String,GString].any{it.isAssignableFrom(f.class)}) {
-            logger.info "String to file $f"
             new File(f)
         }
         else if (File.isAssignableFrom(f.class)){
-            logger.info "File: $f"
             f
         }
         else if (Closure.isAssignableFrom(f.class)) {
-            logger.info "Resolve closure"
             resolveFile(f())
         }
         else throw new IllegalStateException("Unknown type ${f.class}")
@@ -50,7 +46,6 @@ class DatabaseScript extends DatabaseExecutable {
     
     def doExecute() {
         files.each{f->
-            logger.info "Processing file $f"
             executeScript(f)
         }
     }
@@ -59,9 +54,9 @@ class DatabaseScript extends DatabaseExecutable {
         
         File outputFile = new File("${f.absolutePath}.out")
         def exec = getExecutableCommands()
-        project.dryRunExecute("Not executing: $exec", {
+        project.dryRunExecute("Not executing: $exec with file $f.absolutePath", {
             outputFile.withOutputStream {out->
-                logger.info "Executing process: $exec"
+                logger.info "Executing process: $exec with file $f.absolutePath"
                 exec = appendPassword(exec)
                 ProcessBuilder pb = new ProcessBuilder(exec as String[]).redirectErrorStream(true)
                 Process process = pb.start()
