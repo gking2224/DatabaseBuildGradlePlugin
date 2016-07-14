@@ -1,12 +1,21 @@
 package me.gking2224.dbgp.plugin.task.config
 
-import me.gking2224.dbgp.plugin.task.DatabaseConnectTask;
+import me.gking2224.buildtools.util.GroovyUtil
+import me.gking2224.dbgp.plugin.task.DatabaseConnectTask
 
-import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactory
 
 abstract class DatabaseExecutable {
 
-    def profile
+//    def profile
+    def host
+    def username
+    def password
+    def port
+    def databaseName
+    
+    def gu = GroovyUtil.instance()
+    
     def logger = LoggerFactory.getLogger(this.class)
     DatabaseConnectTask task
     def project
@@ -21,24 +30,34 @@ abstract class DatabaseExecutable {
     
     def execute() {
         _client = getClientImplementation()
-        profile = task.getProfileObject(profile)
+//        profile = task.getProfileObject(profile)
         doExecute()
     }
     
     def resolveObjects() {
+        host = gu.resolveValue(host)
+        username = gu.resolveValue(host)
+        println username
+        port = gu.resolveValue(host)
+        password = gu.resolveValue(host)
+        databaseName = gu.resolveValue(host)
         doResolve()
     }
     
     def doResolve() {
-        
+        // override in child classes
     }
     
     def getExecutableCommands() {
-        _client.getClientCommandLineArgs(profile.host, profile.port, profile.username, profile.databaseName)
+        println username
+        println task.username
+        _client.getClientCommandLineArgs(
+            host?:task.host, port?:task.port,
+            username?:task.username, databaseName?:task.databaseName)
     }
     
     def appendPassword(def commands) {
-        _client.getPasswordCommandLineArgs(profile.password).each {
+        _client.getPasswordCommandLineArgs(password?:task.password).each {
             commands << it
         }
         commands
