@@ -8,6 +8,7 @@ class MySQLDatabaseClient implements DatabaseClientHelper {
     def getClientCommandLineArgs(def host, def port, def username, def databaseName) {
         
         [getExecutable(),
+            "-v",
             "-h", host,
             "-P", port,
             "-u", username,

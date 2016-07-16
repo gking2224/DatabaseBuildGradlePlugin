@@ -25,6 +25,7 @@ implements HasResolvableObjects {
     def host
     def port
     def databaseName
+    def dbClientClassName ="me.gking2224.dbgp.plugin.client.MySQLDatabaseClient"
 
     @Override
     def void resolveObjects() {

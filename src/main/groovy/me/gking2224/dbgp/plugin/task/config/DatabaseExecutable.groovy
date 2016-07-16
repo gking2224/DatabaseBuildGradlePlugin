@@ -20,7 +20,7 @@ abstract class DatabaseExecutable {
     DatabaseConnectTask task
     def project
     def failOnError = true
-    def dbClientClassName="me.gking2224.dbgp.plugin.client.MySQLDatabaseClient"
+    def dbClientClassName
     def _client
     
     def DatabaseExecutable(DatabaseConnectTask task) {
@@ -30,17 +30,15 @@ abstract class DatabaseExecutable {
     
     def execute() {
         _client = getClientImplementation()
-//        profile = task.getProfileObject(profile)
         doExecute()
     }
     
     def resolveObjects() {
         host = gu.resolveValue(host)
-        username = gu.resolveValue(host)
-        println username
-        port = gu.resolveValue(host)
-        password = gu.resolveValue(host)
-        databaseName = gu.resolveValue(host)
+        username = gu.resolveValue(username)
+        port = gu.resolveValue(port)
+        password = gu.resolveValue(password)
+        databaseName = gu.resolveValue(databaseName)
         doResolve()
     }
     
@@ -49,8 +47,6 @@ abstract class DatabaseExecutable {
     }
     
     def getExecutableCommands() {
-        println username
-        println task.username
         _client.getClientCommandLineArgs(
             host?:task.host, port?:task.port,
             username?:task.username, databaseName?:task.databaseName)
@@ -73,7 +69,7 @@ abstract class DatabaseExecutable {
     abstract def doExecute();
     
     def getClientImplementation() {
-        if (_client == null) _client = Class.forName(dbClientClassName).newInstance()
+        if (_client == null) _client = Class.forName(dbClientClassName?:task.dbClientClassName).newInstance()
         _client
     }
 }
