@@ -7,7 +7,7 @@ import me.gking2224.dbgp.plugin.task.config.DatabaseStatement
 import org.gradle.api.tasks.TaskAction
 
 
-class ExecuteDatabaseScript extends DatabaseConnectTask {
+class ExecuteDatabaseScript extends DatabaseConnectTask implements HasResolvableObjects {
 	
     def executables = []
 	

@@ -49,6 +49,9 @@ class DatabaseStatement extends DatabaseExecutable {
     }
     
     def doResolve() {
+        logger.info("statements.doResolve()")
         statements = statements.collect{project.resolveValue(it)}
+        logger.info("statements now: $statements")
+        
     }
 }
