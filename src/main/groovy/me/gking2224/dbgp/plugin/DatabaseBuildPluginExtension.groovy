@@ -1,6 +1,5 @@
 package me.gking2224.dbgp.plugin
 
-import org.gradle.api.Project;
 import org.slf4j.LoggerFactory
 
 
@@ -12,6 +11,8 @@ class DatabaseBuildPluginExtension {
     
     public DatabaseBuildPluginExtension(def project) {
         this.project = project
+        project.ext.createDatabaseScript = new File(project.dbDir, "createDatabase.sql")
+        
         project.ext.dbprofile = [:]
         project.dbprofile[Profile.ALL] = new Profile()
         
@@ -37,5 +38,17 @@ class DatabaseBuildPluginExtension {
         c()
         
         project.dbprofile[name] = profile
+    }
+    
+    def createDatabaseScript(String name) {
+        createDatabaseScript(project.dbDir, name)
+    }
+    
+    def createDatabaseScript(File dir, String name) {
+        createDatabaseScript(new File(dir, name))
+    }
+    
+    def createDatabaseScript(File f) {
+        project.ext.createDatabaseScript = f
     }
 }

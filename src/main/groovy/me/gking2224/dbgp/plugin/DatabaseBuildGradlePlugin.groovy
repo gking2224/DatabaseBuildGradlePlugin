@@ -7,9 +7,18 @@ class DatabaseBuildGradlePlugin implements Plugin<Project> {
     
     def project
     
+    def configurers = []
+    
 	void apply(Project project) {
-		project.extensions.create("dbconfig", DatabaseBuildPluginExtension.class, project)
         def dir = project.file("db")
-        project.ext.dbDir = dir 
+        project.ext.dbDir = dir
+         
+		project.extensions.create("dbconfig", DatabaseBuildPluginExtension.class, project)
+        
+        configurers << new DatabaseBuildTasks(project)
+        
+        configurers.each {c->
+            c.configureProject()
+        }
 	}
 }
