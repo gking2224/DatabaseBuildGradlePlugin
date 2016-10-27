@@ -6,11 +6,11 @@ buildscript {
         mavenLocal()
         mavenCentral()
         jcenter()
-//        maven {url= "https://artifactory.gking2224.me/artifactory/libs-release" }
-//        maven {url= "https://artifactory.gking2224.me/artifactory/libs-snapshot" }
+        maven { url= "http://nexus.gking2224.me/nexus/content/repositories/releases" }
+        maven { url= "http://nexus.gking2224.me/nexus/content/repositories/snapshots" }
     }
     dependencies {
-        classpath "me.gking2224:BuildToolsGradlePlugin:0.1.8-SNAPSHOT"
+        classpath "me.gking2224:BuildToolsGradlePlugin:0.1.8"
     }
 }
 plugins {
@@ -34,7 +34,7 @@ repositories {
 dependencies {
     
     testCompile group: 'junit', name: 'junit', version: '4.11'
-    compile "me.gking2224:BuildToolsGradlePlugin:0.1.8-SNAPSHOT"
+    compile "me.gking2224:BuildToolsGradlePlugin:0.1.8"
 	
 	compile gradleApi()
 	compile localGroovy()
