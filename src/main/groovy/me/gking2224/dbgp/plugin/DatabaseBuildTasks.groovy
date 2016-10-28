@@ -32,14 +32,14 @@ class DatabaseBuildTasks extends AbstractProjectConfigurer {
     def makeDb() {
         
         project.task("makeDatabase", type:ExecuteDatabaseScript) {
-            port = {project.envProps.database.port}
-            host = {project.envProps.database.host}
-            databaseName = {project.envProps.database.root.name}
-            username = {project.envProps.database.root.username}
-            password = {project.envProps.database.root.password}
-            ext.appDatabaseUser = {project.envProps.database.username}
-            ext.appDatabasePassword = {project.envProps.database.password}
-            ext.appDatabaseName = {project.envProps.database.name}
+            port = {project.envProps['db.database.port']}
+            host = {project.envProps['db.database.host']}
+            databaseName = {project.envProps['db.root.database.name']}
+            username = {project.envProps['db.root.database.username']}
+            password = {project.envProps['db.root.database.password']}
+            ext.appDatabaseName = {project.envProps['db.database.name']}
+            ext.appDatabaseUser = {project.envProps['db.database.username']}
+            ext.appDatabasePassword = {project.envProps['db.database.password']}
             statement {
                 failOnError = false
                 statement = {"drop user '${appDatabaseUser}'@'localhost'"}
@@ -55,11 +55,11 @@ class DatabaseBuildTasks extends AbstractProjectConfigurer {
     def deployDbTasks() {
         
         project.task("makeSchema", type: ExecuteDatabaseScript) {
-            port = {project.envProps.database.port}
-            host = {project.envProps.database.host}
-            databaseName = {project.envProps.database.name}
-            username = {project.envProps.database.username}
-            password = {project.envProps.database.password}
+            port = {project.envProps['db.database.port']}
+            host = {project.envProps['db.database.host']}
+            databaseName = {project.envProps['db.database.name']}
+            username = {project.envProps['db.database.username']}
+            password = {project.envProps['db.database.password']}
             files {
                 dir = new File(project.dbDir, "model")
                 pattern= /.*.sql/
@@ -71,11 +71,11 @@ class DatabaseBuildTasks extends AbstractProjectConfigurer {
         }
         
         project.task("deployDbCode", type: ExecuteDatabaseScript) {
-            port = {project.envProps.database.port}
-            host = {project.envProps.database.host}
-            databaseName = {project.envProps.database.name}
-            username = {project.envProps.database.username}
-            password = {project.envProps.database.password}
+            port = {project.envProps['db.database.port']}
+            host = {project.envProps['db.database.host']}
+            databaseName = {project.envProps['db.database.name']}
+            username = {project.envProps['db.database.username']}
+            password = {project.envProps['db.database.password']}
             files {
                 dir = new File(project.dbDir, "code")
                 pattern= /.*.sql/
@@ -85,11 +85,11 @@ class DatabaseBuildTasks extends AbstractProjectConfigurer {
         project.tasks.deployDbCode.mustRunAfter project.tasks.makeSchema
         
         project.task("deployDbSeedData", type:ExecuteDatabaseScript) {
-            port = {project.envProps.database.port}
-            host = {project.envProps.database.host}
-            databaseName = {project.envProps.database.name}
-            username = {project.envProps.database.username}
-            password = {project.envProps.database.password}
+            port = {project.envProps['db.database.port']}
+            host = {project.envProps['db.database.host']}
+            databaseName = {project.envProps['db.database.name']}
+            username = {project.envProps['db.database.username']}
+            password = {project.envProps['db.database.password']}
             files {
                 dir = new File(project.dbDir, "seedData")
                 pattern= /.*.sql/
