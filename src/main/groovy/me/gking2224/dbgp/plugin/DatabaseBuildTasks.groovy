@@ -17,6 +17,7 @@ class DatabaseBuildTasks extends AbstractProjectConfigurer {
         embeddedDb()
         makeDb()
         deployDbTasks()
+        rebuildDb()
     }
     
     def embeddedDb() {
@@ -98,5 +99,10 @@ class DatabaseBuildTasks extends AbstractProjectConfigurer {
         project.tasks.deployDbSeedData.mustRunAfter project.tasks.deployDbCode
         
         project.task("deployDbFull", dependsOn:[project.tasks.makeSchema, project.tasks.deployDbCode, project.tasks.deployDbSeedData])
+    }
+    
+    def rebuildDb() {
+        project.task("rebuildDb", dependsOn:[project.tasks.makeDatabase, project.tasks.deployDbFull])
+        project.tasks.deployDbFull.mustRunAfter project.tasks.makeDatabase
     }
 }
